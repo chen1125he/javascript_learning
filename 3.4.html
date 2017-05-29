@@ -1,0 +1,21 @@
+
+<div class="banner">  
+    <ul>  
+        <li style="background:red">first slide.</li>  
+        <li style="background:yellow">second slide.</li>  
+        <li style="background:green">third slide.</li>  
+    </ul>  
+</div>
+<style>
+.banner { position: relative; overflow: auto; }  
+.banner li { list-style: none; }  
+.banner ul li { float: left; }
+</style>
+<!-- And the relevant JavaScript -->
+<script src="jquery-latest.min.js"></script>  
+<script src="unslider.js"></script> 
+<!-- but with the right path! -->
+<script>$(function() {  
+    $('.banner').unslider();  
+});  
+</script>

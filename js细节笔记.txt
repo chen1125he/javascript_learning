@@ -1,0 +1,77 @@
+2.	Javascript区分大小写
+3.	Js中未用var定义的变量会成为全局变量即使在一个方法中用到的未用var定义变量在后面的方法里面都能使用
+4.	Typeof()的值有undefined/Boolean/string/number/object(是个对象或者null)/function
+声明了未赋值就是undefined(一定要先声明，未声明就是报错)
+5.	任何类型都有和boolean相匹配的值，数字false是0和NaN，string的false是空串object的false是null
+6.	Number类型可以有8进制和16进制(0/0x)
+7.	NaN是一个特殊的数值任何涉及NaN的操作都会返回NaN  另NaN不等于NaN
+8.	数字转换成字符串的可以和三个Number,parseInt(), parseFloat
+Number() Boolean => 0/1, null => 0, undefined => NaN 没有八进制，十六进制会直接转换成同值的十进制
+parseInt 有八进制从前向后读取，还可以带两个参数parseInt(‘AF’, 16)指定进制，这时候前面可以不带进制标志
+9.	在调用数值型的toString()方法可以在括号里面加个参数，参数是进制
+Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转换
+10.parents和closest相似都是找父级元素，前者返回集合，后者返回单个元素
+
+11.如果数值计算的结果超过了ECMAScript的表示范围，那么结果是Infinity或者是-Infinity(与0相乘是NaN),正Infinity相加是Infinity，负则负，正负相加则是NaN，减法相当于+负的 Infinity
+
+12.字符串的大小比较是比较编码数值，字符串与数值的比较会先转换字符串到数字
+
+13.全等于和不全等于
+	5 == "5" // true
+	5 === "5" // false 数据类型不等
+	5 !== "5" // true
+
+14.逗号操作符
+	执行多个操作，并返回最后一个操作的值
+	也可以用于声明多个变量
+	
+15.for-in
+	for(property in expression){}
+	迭代，可以枚举一个对象里面所有的值,这个值是属性名或者是数组的索引
+	var arr = [1, 2, 3, 4, 5, 7, 8];
+		Array.prototype.name = "ccyy";
+		for(var a in arr){
+			console.log(a, arr[a]);
+		}//会多输入一个name属性来，但name却并不是arr的属性，这里可以用arr.hasOwnProperty()
+
+16.with，将代码的作用域设置到一个特定的对象中，简化多次编写同一个对象的工作,严格模式下不允许使用，这个好像没多大用
+	var qs = location.search.substring(1)
+	var hn = location.hostname
+	var url = location.href
+	=>
+	with(location){
+		var qs = search.substring(1)
+		...
+	}
+	
+17.js的函数不在乎被传递多少参数，传递或者不传递参数，甚至不按定义那样传递参数，即使没有定义参数，也可以传递参数进去
+	函数内部有一个arguments，与数组类似，可以用arguments[num]来访问参数，因而它的特点是，参数的命名只是提供便利，但不是必需的
+	
+18.引用类型变量是object，把一个引用类型变量赋值给另一个变量，他们两个就都指向同一个对象了，不过它们俩各自都是有着自身变量的空间
+	小陷阱
+	function setName(obj){
+		obj.name = "Nicolas";
+		obj = new Object();
+		obj.name = "Greg";
+	}
+	var person = new Object();
+	setName(person);
+	person.name // 依然是"Nicolas"
+	
+19.作用域链
+	局部变量想作用到其他域，可以用1.with, 2.try-catch
+	
+	js的作用域和c不太相同在for循环和if里面定义的变量还是可以作用到其他地方的, while,do-while也是可以的, switch-case里面也是可以的
+	function func(num1, num2){
+		sum = num1 + num2; // 如果这个sum没有加var去初始化，那么是可以在外部被访问到的，加了则不行，不过如果在stric模式下会报错
+		return sum
+	}
+	
+20.新建一个引用类型变量
+	var person = {"name" : "Nicolas", 5 : true, c : 'name'}
+	var person = new Object();
+	
+	访问属性可以用person.name，也可以用person['name'],如果属性名中间带了空格 "na me"就不能用.访问了
+	如果是数字，可以用person[5]也可以用person['5'],  像里面的c会自动转化成字符串只能person.c或者person['c'], 不能person[c]
+	
+21.对于数组来说，arr.length不是只读的可以手动修改的，可以用来一移除后面的值，也可以用来增加数组空间

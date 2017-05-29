@@ -1,0 +1,31 @@
+<script type="text/javascript" src="../jquery-1.8.3.js"></script>
+
+<script type="text/javascript">
+	$(function(){
+		do {
+		i = 10;
+		j = 2;
+		}while(j++, i < 10)
+		console.log(i, j);
+		
+		switch(j){
+			case 2:
+				var a = 13;
+				break;
+			case j:
+				var b = 12;
+				break;
+			default:
+				var c = 11;
+		}
+		console.log(a, b, c)
+		
+		var obj = {
+			"a" : 'name',
+			5 : 'name',
+			c : 'cyy'
+		}
+		
+		console.log( obj['c'], obj.c)
+	})
+</script>
