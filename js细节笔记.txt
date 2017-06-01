@@ -75,3 +75,4 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	如果是数字，可以用person[5]也可以用person['5'],  像里面的c会自动转化成字符串只能person.c或者person['c'], 不能person[c]
 	
 21.对于数组来说，arr.length不是只读的可以手动修改的，可以用来一移除后面的值，也可以用来增加数组空间
+	arr[arr.length] = value 可以直接在数组末尾添加一个值

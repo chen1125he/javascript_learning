@@ -1,0 +1,36 @@
+<script type="text/javascript" src="../jquery-1.8.3.js"></script>
+
+
+<script type="text/javascript">
+
+	$(function(){
+	
+		arr = [1, 2]
+		arr.push(3)
+		console.log(arr.length)
+		arr.pop()
+		console.log(arr.length)
+		arr.shift()
+		console.log(arr.length)
+		arr.unshift(-1, -2)
+		console.log(arr.join(","))
+		
+		console.log([[1,2,3], 5].join(","))
+		
+		arr2 = arr.concat([123],[[123], 3])
+		console.log(arr2)
+		alert(arr2)
+		arr2.unshift([12,3])
+		console.log(arr2)
+		
+		console.log(Date.parse("02/25/1995").toString())
+		console.log(new Date("1995/02/25").toString())
+		
+		pat = RegExp("(([a-z])(\\d))", "ig")
+		text = "A1 A2 a3 a5 b4 B6"
+		console.log(pat.exec(text))
+		console.log(pat.exec(text))
+		console.log(RegExp.lastMatch)
+		console.log(RegExp.lastParen)
+	})
+</script>

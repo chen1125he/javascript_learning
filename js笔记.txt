@@ -5,3 +5,52 @@
 
 3.函数签名就是函数的声明信息，包括参数类型，参数个数，参数顺序之类。
 	js不存在函数签名的特性，所以没有方法重载(和上面有点重复了QAQ)
+	
+4.value instanceof Array 判断一个值是不是array类型
+
+5.array有一个join方法，用来拼接数组，把数组转换成字符串，可以传一个参数，如果没有参数或则参数是undefined则默认是",",如果数组里面还有数组，也会把里面的数组拆开,alert一个数组会自动join, console.log不会
+	arr.concat(params),复制arr,再在新复制的数组里面加入arr，params= 1, 2, [123,3]会把[123,3]拆开，但如果是1, 2, [123, [123,3]]里面的[123,3]仍然会以数组的形式插入
+	push()向arr最后添加，pop()去掉最后一个，并返回最后一个值/shift()去掉第一个，并返回第一个值(unshift("red", "green")可以插入(从头)，返回新数组长度)
+	arr.slice(startPos[, endPos])截取生成新串
+	arr.indexOf()/lastIndexOf()从开始检索/从末尾检索，返回位置，没找到-1
+	reverse()反转，sort()排序sort里面可以传入参数(一个函数)
+	sort(compare)
+	function(value1, value2){
+		if(value1 < value2){
+			return 1;
+		}else if(value1 > value2){
+			return -1;
+		}else{
+			return 0;
+		}
+		// 也可以直接return value2 - value1;
+	}
+6.数组迭代
+	1.arr.every(function(item, index, array){
+		return item > 2;		//如果每一项都返回true，则返回true
+	})
+	2.arr.filter(function(item, index, array){
+		return item > 2;		//返回满足条件的项，组成一个数组，类似ruby里面的collect
+	})
+	3.arr.forEach(function(item, index, array){
+		// 对每一项运行给定的函数
+	})
+	4.arr.some(function(item, index, array){
+		return item > 2;		//如果有一项返回true则返回true
+	})
+	5.arr.map(function(item, index, array){
+		return item * 2;		//返回此项计算后的值，然后用这些值组成数组
+	})
+	
+	6.arr.reduce(function(prev, current, index, array){
+		return ; 				//每次return会作为下一次prev, reduceRight()从右边开始遍历
+	})
+	
+7.正则表达式
+	RegExp.new("pattern", "ig")//配置全写在一起
+	pattern.exec(text) => array (有index属性，input属性)
+		exec的pattern如果不设置g就只永远匹配第一个，匹配失败返回null，有g每次执行会匹配下一个(直到末尾)，上面的array[num]是分组，不是匹配到了几个,
+	pattern.test(text) => true/false
+	
+	RegExp.input(opera无)/lastMatch(opera无)/lastParen(opera无)最近一次匹配的捕获组,如果有多个组就取最后一个/leftContext/multiline(IE和Opera无)/rightContext
+	RegExp.$1...$9，9个分组
