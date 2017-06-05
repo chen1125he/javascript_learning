@@ -76,3 +76,24 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	
 21.对于数组来说，arr.length不是只读的可以手动修改的，可以用来一移除后面的值，也可以用来增加数组空间
 	arr[arr.length] = value 可以直接在数组末尾添加一个值
+	
+22.函数也算是对象，可以赋值给另外一个变量
+	function fun_a(num){
+		return num + 1
+	}
+	function fun_a(num){
+		return num + 2
+	}
+	这里是想做重载，但实际上会是将fun_a再一次赋值另一个函数
+	
+23.var fun = function(){}
+	function fun(){}
+	这两个是不一样的
+	第二种对顺序没有要求，不论写在哪都可以，因为一开始会有一个名为函数声明提升的过程，将函数声明添加到执行环境中
+	第一个只相当一个变量，运行到这的时候函数才会存在
+	这两种的写法区别只在这，什么时候可以调用函数
+	也可以这样写，var sum = function sum(){}	//safari会不支持
+	但这种也不能在之前就调用这个函数
+	sum是这个函数，sum()是这个函数值
+	
+24.

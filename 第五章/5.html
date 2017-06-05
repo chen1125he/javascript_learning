@@ -5,6 +5,15 @@
 
 	$(function(){
 	
+		var arr = [3, 20, 6, 4, 25, 98, 1];
+		arr.sort(compare);
+		console.log(arr);
+		
+		function compare(value1, value2){
+			console.log(arguments[0], arguments[1]);
+			return value2 - value1;
+		}
+	
 		arr = [1, 2]
 		arr.push(3)
 		console.log(arr.length)
@@ -32,5 +41,45 @@
 		console.log(pat.exec(text))
 		console.log(RegExp.lastMatch)
 		console.log(RegExp.lastParen)
+		fun1();
+		function fun1(){
+			console.log("陳さんはハンサムです。")
+		}
+		// fun2();
+		var fun2 = function(){
+			console.log("曹さんもハンサムです。")
+		};
+		fun2();
+		
+		var fun3 = function fun3(){
+			console.log("りゅさんもハンサムです。")
+		}
+		fun3();
+		
+		var data = [{name: 'Cyy', age: 21}, {name: "Hanhan", age: 22}]
+		function test(object1, object2){
+			console.log(object1, object2);
+		}
+		function compare(propertyName){
+			console.log(arguments.callee.caller)
+			var a = function(object1, object2){
+				console.log(object1, object2);
+				return 1;
+			}
+			return function(obj1, obj2){
+				console.log(obj1, obj2);
+				return 1;
+			}
+		}
+		data.sort(compare("name"))
+		function outer(){
+			inner();
+		}
+		outer();
+		function inner(){
+			console.log("============");
+			console.log(this.caller);
+			console.log(arguments.callee.caller);
+		}
 	})
 </script>

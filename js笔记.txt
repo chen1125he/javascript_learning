@@ -13,8 +13,9 @@
 	push()向arr最后添加，pop()去掉最后一个，并返回最后一个值/shift()去掉第一个，并返回第一个值(unshift("red", "green")可以插入(从头)，返回新数组长度)
 	arr.slice(startPos[, endPos])截取生成新串
 	arr.indexOf()/lastIndexOf()从开始检索/从末尾检索，返回位置，没找到-1
-	reverse()反转，sort()排序sort里面可以传入参数(一个函数)
-	sort(compare)
+	reverse()反转，sort()排序sort里面可以传入参数(一个函数, 然后函数有返回值，)
+	sort(compare),会自动传入两个参数, 或者说整个数组, 也可以自己传入参数
+	如果想把一个对象数字组按照某个属性排序， 就可以这样
 	function(value1, value2){
 		if(value1 < value2){
 			return 1;
@@ -25,6 +26,17 @@
 		}
 		// 也可以直接return value2 - value1;
 	}
+	arr.sort(compare("name"))
+	function compare(propertyName){
+			var a = function(object1, object2){
+				console.log(object1, object2);//这两个不是数组里面的两个参数，是undefined
+				return 1;
+			}
+			return function(obj1, obj2){
+				console.log(obj1, obj2);//这两个是数组里面的两个参数, 为什么呢？
+				return 1;
+			}
+		}
 6.数组迭代
 	1.arr.every(function(item, index, array){
 		return item > 2;		//如果每一项都返回true，则返回true
