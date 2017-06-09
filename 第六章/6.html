@@ -136,5 +136,13 @@
 		console.log(cyy.name);
 		console.log(String.fromCharCode("yy".charCodeAt(0)+0xFEE0));
 		
+		
+		str1 = "cyy love zhh very much".replace(/\b\w+\b/g, function(str){
+			//return str.charAt(0).toUpperCase() + str.slice(1);
+			return str.charAt(0).toUpperCase() + str.substr(1);
+		});
+		console.log(str1);
+		
+		console.log("aacbjksdhfaif".substring(-2), "aacbjksdhfaif".length)
 	})
 </script>

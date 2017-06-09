@@ -32,7 +32,9 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 		Array.prototype.name = "ccyy";
 		for(var a in arr){
 			console.log(a, arr[a]);
-		}//会多输入一个name属性来，但name却并不是arr的属性，这里可以用arr.hasOwnProperty()
+		}//会多输入一个name属性来，但name却并不是arr的属性，这里可以用arr.hasOwnProperty(),这个方法只会判断是不是自己对象的属性，如果只是prototype里面的，判断为false
+		 //in会判断是不是有这个属性(strPropertyName in Object),实例和原型都会去找
+		 //for-in实例和原型中可以通过对象访问的属性和方法都会被遍历出来
 
 16.with，将代码的作用域设置到一个特定的对象中，简化多次编写同一个对象的工作,严格模式下不允许使用，这个好像没多大用
 	var qs = location.search.substring(1)
@@ -117,7 +119,7 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	String.fromCharCode(intCode1[, intCode2])//返回字符串，String的静态方法
 	str.concat(str1, str2)//会返回拼接的字符串，原串不变
 	str.substr(startPosition[, length])//字符串截取，如果长度是负，那会转成0,开始位置是负数的话，length+(负数)
-	str.substring(startPosition[, endPosition])//字符串截取，可以输入负数，但会转换成0，会比较开始和结束位置，自动把大的那个数作为开始位置
+	str.substring(startPosition[, endPosition])//字符串截取，两个可以输入负数，但会转换成0，会比较开始和结束位置，自动把大的那个数作为开始位置
 	str.slice(startPosition[, endPosition])//负数会的方法是length+(负数)
 	
 	str.indexOf(str[, startPosition])
@@ -228,6 +230,30 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 		var o = new Object();
 		Person.call(o, "cyy", 21, "PG");
 		
+		prototype添加的方法，即使是在new完一个对象后添加的，这个对象也可以使用的
+		也可以通过prototype去修改原来的方法，也可以通过delete Object.prototype.delete去删除这个方法, 删除之后再调用会报错
+		
+		使用prototype会很灵活所以需要注意它会不会有问题，if(obj.functionName) 判断方法存在不存在
+		也可能会改变方法以及属性，因为某个特殊的对象去改变方法属性而影响到了其他对象的方法及属性
+		原型属性是共享的，一个实例的属性修改了，其他实例的属性也会跟着改变的(写在原构造方法里面的不会影响)
+		
+		如果某个对象添加了一个类中同名的方法，算是重写吧，但原来的prototype里面的方法仍然存在，但会先去对象里面找这个方法然后调用，但如果delete了，就可以再次去调用prototype的方法了
+		
+		重写原型
+		另一种写法，这种写法不会立即应用到在这表达式之前创建的实例中，而是后面创建的实例才会存在(在重写之前创建的对象，它的prototype还是指的原prototype)
+		而且它的constructor不再指向Person,不过instanceof还是可以的
+		原先的构造函数中方法还是存在的,但再次定义的会把之前定义的给替换掉
+		
+		obj.constructor
+		Person.prototype = {
+			[constructor: Person,]//原本不可以枚举的现在可以枚举了，但可以通过Object.defineProperty(Person.prototype, "constructor", {enumerable: false})
+			name: '',
+			sayName: function(){
+				
+			}
+		}
+		
+		
 	工厂模式
 		function createPerson(name, age, job){
 			var o = new Object();
@@ -239,3 +265,10 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 			}
 			return o;
 		}
+		
+	Object.keys(Person.prototype)//可以获取字符串数组(可枚举的属性)
+	Object.getOwnPropertyNames(Person.prototype)//直接获取所有，不论是否可枚举
+	
+	
+	原生对象(String, Array, Object)
+	

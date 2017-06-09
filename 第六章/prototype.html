@@ -13,19 +13,65 @@
 	
 	function Student(){
 		this.sayHello = function(){
-			console.log("Hello Hanhan");
+			console.log("Hello Hanhan1");
 		}
 	}
 	
 	$(function(){
+		Student.prototype = Person.prototype;
 		var student = new Student();
 		student.sayHello();
-		Student.prototype = Person.prototype;
-		student.sayHello();
+		
 		//student.sayName();
 		
-		var stu2 = new Student();
-		student.sayHello();
-		student.sayName();
+		console.log("================================");
+		//student.sayName();
+		var person = new Person("Hanhan", 21, 30);
+		//person.sayHello();
+		Person.prototype.sayHello = function(){
+			console.log("Hello Hanhan");
+		}
+		person.sayHello();
+		Person.prototype.sayHello  = function(){
+			console.log("Hello World");
+		}
+		person.sayHello=function(){
+			console.log("Hello Cyy");
+		};
+		person.sayHello();
+		//delete Person.prototype.sayHello;
+		//delete person.sayHello;
+		person.sayHello.call(new Person());
+		
+		var person2 = new Person();
+		person2.sayHello();
+		
+		Person.prototype = {
+			constructor: Person,
+			sex: "man"
+		}
+		var person3 = new Person();
+		console.log(person3.sex);
+		console.log(person2.sex);
+		console.log("=====")
+		person2.sayHello();
+		console.log("=====")
+		
+		Person.prototype = {
+			constructor: Person,
+			father: "Bill"
+		}
+		
+		var person4 = new Person()
+		console.log(person4.father);
+		console.log(person4.sex);
+		person4.sayHello();
+		
+		//var stu2 = new Student();
+		//student.sayHello();
+		//student.sayName();
+		
+		
+		console.log(String.prototype.toUpperCase.call("this is me"))
 	})
 </script>
