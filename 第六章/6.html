@@ -1,0 +1,140 @@
+<script type="text/javascript" src="../jquery-1.8.3.js"></script>
+
+<script type="text/javascript">
+	var person = {
+		_writableTest: "false",
+		_height: 20,
+		name: 'Nicolas',
+		age: '29',
+		job: 'SoftWare Engineer',
+		
+		sayName: function(){
+			console.log(this.name);
+		}
+	}
+	$(function(){
+		console.log(person.name);
+		console.log(person.age);
+		console.log(person.job);
+		person.sayName();
+		delete person.name;
+		person.sayName();
+		
+		var a = function(){
+			console.log("this is a function");
+		}
+		a();
+		delete a;
+		console.log(typeof(a));
+		
+		var as = "this is a variable";
+		console.log(typeof(as));
+		delete as;
+		console.log(typeof(as));
+		
+		Object.defineProperty(person, "name", {
+			value: 'Cyy',
+			enumerable: false,
+			configurable: true, 
+			writable: false
+		});
+		
+		Object.defineProperty(person, "height", {
+			set: function(newValue){
+				this._height = newValue;
+			},
+			get: function(){
+				return this._height;
+			}
+		})
+		
+		person.setName = function(name){
+			this.name = name;
+		}
+		console.log(person.name);
+		person.name = 'Zhh';
+		console.log(person.name);
+		person.setName("Zhh");
+		console.log(person.name);
+		
+		delete person.name;
+		console.log(person.name)
+		
+		Object.defineProperty(person, "name", {
+			writable: true
+		});
+		person.name = 'Zhh';
+		console.log(person.name);
+		for(value in person){
+			console.log(person[value])
+		}
+		console.log(person.height = 30);
+		console.log(person.height);
+		
+		
+		
+		Object.defineProperty(person, "writableTest", {
+			configurable: false, 
+			enumerable: false,
+			get: function(){
+				return this._writableTest;
+			},
+			set: function(newValue){
+				this._writableTest = newValue;
+			}
+		})
+		person._writableTest = 26;
+		console.log(person.writableTest);
+		person.writableTest = "that";
+		console.log(person.writableTest);
+		
+		Object.defineProperties(person, {
+			t: {
+				value: 20
+			},
+			_hobby: {
+				value: "game"
+			},
+			hobby: {
+				get: function(){
+					return this._hobby;
+				},
+				set: function(newValue){
+					this._hobby = newValue;
+				}
+			}
+		})
+		console.log(person.t)
+		person.t = 30
+		console.log(person.t)
+		console.log(person.hobby);
+		person.hobby = "coding";
+		console.log(person.hobby);
+		
+		var descriptor = Object.getOwnPropertyDescriptor(person, "t")
+		console.log(descriptor.configurable);
+		console.log(descriptor.enumerable);
+		console.log(descriptor.writable);
+		
+		function WhatIsThis(){
+			console.log(this instanceof Function);
+		}
+		var what = new WhatIsThis();
+		console.log(what instanceof WhatIsThis);
+		
+		function Person(name, age, job){
+			this.name = name;
+			this.age = age;
+			this.job = job;
+			this.sayName = function(){
+				console.log(this.name);
+			}
+		}
+		var cyy = new Person("cyy", 21, "PG");
+		console.log(cyy.name);
+		cyy.name = 'Zhh';
+		console.log(cyy.name);
+		console.log(String.fromCharCode("yy".charCodeAt(0)+0xFEE0));
+		
+	})
+</script>

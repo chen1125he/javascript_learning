@@ -96,4 +96,146 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	但这种也不能在之前就调用这个函数
 	sum是这个函数，sum()是这个函数值
 	
-24.
+	函数也是对象，可以拥有方法
+	
+24.Boolean类型
+	bool对象和bool类型是两种概念
+	var falseObject = new Boolean(false)
+	falseObject && true => true //bool对象在表达式中代码的永远是true
+	false instanceof Boolean => false
+	falseObject instanceof Boolean => true
+	typeof(falseObject) => object 	//是对象
+	typeof(false) => boolean	//是boolean类型
+25.同Boolean类型一样，Number类型也重写了valueOf(), toLocalString()和toString()
+	number.toString()可以传递
+	number.toFixed(),可以转换成保留传入参数的小数位数的字符串，会四舍五入
+	
+26.String
+	str.length,返回字符串长度
+	str.charAt(position)// 也可以用str[postion]
+	str.charCodeAt(postion)//返回编码
+	String.fromCharCode(intCode1[, intCode2])//返回字符串，String的静态方法
+	str.concat(str1, str2)//会返回拼接的字符串，原串不变
+	str.substr(startPosition[, length])//字符串截取，如果长度是负，那会转成0,开始位置是负数的话，length+(负数)
+	str.substring(startPosition[, endPosition])//字符串截取，可以输入负数，但会转换成0，会比较开始和结束位置，自动把大的那个数作为开始位置
+	str.slice(startPosition[, endPosition])//负数会的方法是length+(负数)
+	
+	str.indexOf(str[, startPosition])
+	str.lastIndexOf(str[, startPosition])
+	
+	可以通过改变position的值，循环出一个字符串中被查找的字符串所有的位置
+	var positions = [];
+	var pos = stringValue.indexOf("e");
+	while(pos > -1){
+		position.push(pos);
+		pos = stringValue.indexOf("e", pos+1)
+	}
+	
+	str.trim()	//删除前后前格
+	
+	str.toLowerCase()//大小写转换
+	str.toUpperCase()
+	
+	str.match(pattern)和exec相似，返回的是第一次匹配到的串，数组里面的是分组，
+	str.search(pattern),查找位置
+	str.replace(/sd/g, "")//带了g可以替换全局, 可以用$num引用分组($0好像没用？chorm)，$$才是美元符号， $'匹配到子串之前的字符串， $`匹配到子串之后的字符串， $&整个匹配到的子字符串
+		str.replace(pattern, function(matchedString, position, originalText){})
+	str.split(string/pattern),若分隔符号出现在最左或者最右，那么也会多出一个空串
+	str.localeCompare(str2)//比的是谁在谁后面
+27.Global对象
+	encodeURI()/decodeURI() //处理空格
+	encodeURIComponent()/decodeURICompontent()//处理非数字字母字符
+	
+	eval() //是个解析器，可以把js的表达式的字符串运行
+	
+	Math.PI	//
+	Math.max/min()	//不是传数组
+	Math.ceil()		//向上舍入
+	Math.floor()	//向下舍入
+	Math.round()	//四舍五入
+	
+	Math.random() * max => (0, max); 
+		Math.floor(Math.random() * 可能值的总数 + 第一个可能的值) 比如1-100 Math.random() * 100 => (0, 100) + 1 => (1, 101)再向下舍
+	
+	Math.abs(num) //绝对值
+	Math.exp(num) //返回Math.E的num次幂
+	Math.log(num) //返回num的自然对数
+	Math.pow(num, power) //返回num的power的次幂
+	Math.sqrt(num) //返回num的平方根
+	Math.sin()/cos()/tan()	//
+	
+28.Object	
+	带_year可以表示只能通过方法访问的属性
+	var person = {
+		name: 'Nicolas',
+		age: '29',
+		job: 'SoftWare Engineer',
+		
+		sayName: function(){
+			console.log(this.name);
+		}
+	}
+	
+	Object.defineProperty(person, "hobby", {
+		writable: false,	// 是否能修改属性的值,设置成false就不能修改了,严格模式下赋值会报错 default: true
+		value: '',			// 默认值
+		configurable: false,// 是否能通过delete删除属性，能否重新定义属性 default: true
+		enumerable: false	// 是否能通过for-in循环返回属性 default: true
+	});//如果configurable false, 则不能使用些方法重复定义同一个对象的同一个属性，否则会报错
+	
+	访问器
+	Object.defineProperty(person, "hobby", {	(这个问题似乎是因为writable的问题，好像它的默认是false, 通过defineProperty指定的，它的默认就是false。通过初始化指定的默认是true)
+		configurable: false,	//是否能通过delete删除属性，能否重新定义属性 default: true
+		enumerable: false, 		//能否通过for-in循环返回属性， default: true
+		set: function(newValue){	//没有制定尝试写入就会报错
+			this._hobby = newValue;
+		},
+		get: function(){			//没有指定就是undefined，严格模式下会报错
+			return this._hobby
+		}
+	}
+	
+	定义多个属性
+	Object.defineProperties(person, {
+		_hobby:{
+			value: "game"
+		},
+		hobby:{
+			get: function(){
+				return this._hobby;
+			},
+			set: function(newValue){
+				this._hobby = newValue;
+			}
+		}
+	})
+	
+	构造函数
+		function Person(name, age, job){
+			this.name = name;
+			this.age = age;
+			this.job = job;
+			this.sayName = function(){
+				console.log(this.name);
+			}
+		}
+		var cyy = new Person("cyy", 21, "PG");
+		console.log(cyy.name);
+		任何函数只要通过new调用就会变成构造函数
+		如果直接调用Person("cyy", 21, "PG");
+		就是会添加到window
+		也可以通过call/apply来调用
+		var o = new Object();
+		Person.call(o, "cyy", 21, "PG");
+		
+	工厂模式
+		function createPerson(name, age, job){
+			var o = new Object();
+			o.name = name;
+			o.age = age;
+			o.job = job;
+			o.sayName = function(){
+				console.log(this.name);
+			}
+			return o;
+		}

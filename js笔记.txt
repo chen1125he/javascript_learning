@@ -1,5 +1,14 @@
 1.js的函数不在乎被传递多少参数，传递或者不传递参数，甚至不按定义那样传递参数，即使没有定义参数，也可以传递参数进去
 	函数内部有一个arguments，与数组类似，可以用arguments[num]来访问参数，因而它的特点是，参数的命名只是提供便利，但不是必需的
+	arguments.callee,是一个指针，用来指向拥有这个arguments对象的函数,arguments.callee.length用于获取形参数,arguments.length用于获取实参数
+	//递归阶乘
+	function factorial(num){
+		if(num <= 1){
+			return 1;
+		}else{
+			return num * arguments.callee(num-1)
+		}
+	}
 	
 2.因为上面的特点存在，js方法没有重载
 
@@ -60,9 +69,42 @@
 	
 7.正则表达式
 	RegExp.new("pattern", "ig")//配置全写在一起
-	pattern.exec(text) => array (有index属性，input属性)
+	pattern.exec(text) => array (有index属性，input属性)//还有个match,返回值相同，但str.match(pattern), pattern.exec(str)
 		exec的pattern如果不设置g就只永远匹配第一个，匹配失败返回null，有g每次执行会匹配下一个(直到末尾)，上面的array[num]是分组，不是匹配到了几个,
 	pattern.test(text) => true/false
 	
 	RegExp.input(opera无)/lastMatch(opera无)/lastParen(opera无)最近一次匹配的捕获组,如果有多个组就取最后一个/leftContext/multiline(IE和Opera无)/rightContext
 	RegExp.$1...$9，9个分组
+8.函数内的this，是函数据以执行的对象，如果是全局，那就是window
+	var o = {color: 'blue'}
+	window.color = "red";
+	function sayColor(){
+		console.log(this.color);
+	}
+	sayColor();
+	o.sayColor = sayColor;	//这个函数。。。有点奇怪,不过也能理解，functionName 是这个函数变量名，functionName()是调用这个函数
+	o.sayColor();
+	
+	caller， 可以返回调用当前函数的引用，argument.callee.caller/functionName.caller
+	只有Opera 9.6以前的版本可能不支持caller
+	
+9.函数的属性和方法
+	函数有一个length方法，用于获取形参(期望的参数)的数量
+	
+	两个方法apply()和call()用于扩充函数的作用域, 降低耦合度
+	functionName.apply(obj, [param1, param2]);
+	functionName.call(obj, arguments);
+	sayColor.call(o)
+	sayColor.call(this);
+	
+	Math.max/min().apply(Math, arr);
+	
+	bind()方法
+	sayColor.bind(o),绑定之后即使在全局调用sayColor，其中的this也是o
+	
+	sayColor.call(window);
+10.同Boolean类型一样，Number类型也重写了valueOf(), toLocalString()和toString()
+	number.toString()可以传递
+	number.toFixed(),可以转换成保留传入参数的小数位数的字符串，会四舍五入
+	
+11.带_year可以表示只能通过方法访问的属性
