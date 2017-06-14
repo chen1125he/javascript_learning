@@ -212,7 +212,7 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 		}
 	})
 	
-	构造函数
+	构造函数(1)
 		function Person(name, age, job){
 			this.name = name;
 			this.age = age;
@@ -230,22 +230,31 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 		var o = new Object();
 		Person.call(o, "cyy", 21, "PG");
 		
-		prototype添加的方法，即使是在new完一个对象后添加的，这个对象也可以使用的
+		prototype添加的方法，即使是在new完一个对象后添加的，这个对象也可以使用的(5)
 		也可以通过prototype去修改原来的方法，也可以通过delete Object.prototype.delete去删除这个方法, 删除之后再调用会报错
 		
 		使用prototype会很灵活所以需要注意它会不会有问题，if(obj.functionName) 判断方法存在不存在
 		也可能会改变方法以及属性，因为某个特殊的对象去改变方法属性而影响到了其他对象的方法及属性
-		原型属性是共享的，一个实例的属性修改了，其他实例的属性也会跟着改变的(写在原构造方法里面的不会影响)
+		
+		※原型属性是共享的，一个实例的属性(只有引用类型)改变了(如arr.push(1))，其他实例的属性(只有引用类型)也会跟着改变的(写在原构造方法里面的不会影响,所以最好写在构造方法里面)，如果是更换值不会，如把arr => num
+		但如果是继承而来的话，
+			function SuperType(){
+				this.arr = [11, 22, 33, 44];
+			}
+			function SubType(){
+			}
+			SubType.prototype = new SuperTyp();
+			这时arr对于SubType来说就是SubType.prototype.arr，也是会被共享的
 		
 		如果某个对象添加了一个类中同名的方法，算是重写吧，但原来的prototype里面的方法仍然存在，但会先去对象里面找这个方法然后调用，但如果delete了，就可以再次去调用prototype的方法了
 		
 		重写原型
 		另一种写法，这种写法不会立即应用到在这表达式之前创建的实例中，而是后面创建的实例才会存在(在重写之前创建的对象，它的prototype还是指的原prototype)
 		而且它的constructor不再指向Person,不过instanceof还是可以的
-		原先的构造函数中方法还是存在的,但再次定义的会把之前定义的给替换掉
+		原先的构造函数中方法还是存在的,但再次定义的会把之前定义的prototype给替换掉
 		
 		obj.constructor
-		Person.prototype = {
+		Person.prototype = {//(2)
 			[constructor: Person,]//原本不可以枚举的现在可以枚举了，但可以通过Object.defineProperty(Person.prototype, "constructor", {enumerable: false})
 			name: '',
 			sayName: function(){
@@ -254,7 +263,7 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 		}
 		
 		
-	工厂模式
+	工厂模式(3)
 		function createPerson(name, age, job){
 			var o = new Object();
 			o.name = name;
@@ -269,6 +278,82 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	Object.keys(Person.prototype)//可以获取字符串数组(可枚举的属性)
 	Object.getOwnPropertyNames(Person.prototype)//直接获取所有，不论是否可枚举
 	
-	
+	动态原型模式(4)
+	function Person(name, age, job){
+			this.name = name;
+			this.age = age;
+			this.job = job;
+			this.sayName = function(){
+				console.log(this.name);
+			}
+			if(typeof this.sayName != "function"){//通过检查某个应该存在的方法是否有效来决定是否需要初始化原型
+				Person.prototype.sayName = function(){
+					console.log(this.name);
+				}
+			}
+		}
+	寄生构造函数模式(6)
+	和工厂模式类似也和构造方法类似，构造方法会自动返回构造的对象，也可以用过return改写返回的值
+	但是是通过new出来的，用处嘛，像是给已有的类(如Array)创建一个具有某些特殊方法的对象
+		function SpecialArray(){
+			var values = new Array();
+			values.push.apply(values, arguments);
+			values.toPipedString = function(){
+				return this.join("|");
+			}
+			return values;
+		}
+		var colors = new SpecialArray("red", "blue", "green");
+		colors.toPipedString()
+		
+	稳妥构造函数模式(7)
+		没有公共属性，其方法也不引用this的对象，与寄生相似，但不用new
+		可以添加方法，但不可能通过添加的方法访问到创建时候的原始数据
+		function Person(name, age, job){
+			var o = new Object();
+			o.hobby = "";
+			
+			o.sayName = function(){
+				return name;
+			}
+			
+			return o;
+		}
+		var o = Person("Nicolas", 29, "pg");
+		friend.sayName();
+		
 	原生对象(String, Array, Object)
 	
+29.继承
+	原型链//所有原型都会继承自Object.prototype,找方法会先去找实例，再找原型，再找链的上一个实例，再找原型
+		Student.prototype = new Person("Hanhan", 21, 30);//实质是替换原型
+		var stu = new Student();	//继承了//如果有和super相同的方法，那是方法的重写，目前还不知道怎么去调用super方法//如果重写的方法被删除，那就会调用到原方法
+		
+		stu.sayName.call(new Person("Hh", 21, 30));//被重写的方法//如果这样调用，那只会更新stu的person属性，方法依然是stu的方法
+		如果再用Student.prototype={}的话原来的就会被替换掉
+		
+		person = new Person("Hanhan", 21, 30);
+		Student.prototype = person;
+		HighStudent.prototype = new Student();
+		highStu = new HighStudent();
+		stu = new Student();
+		person = new Person();
+		console.log(highStu.constructor);
+		console.log(stu.constructor);
+		console.log(person.constructor);
+		//三个constructor都是Person,constructor里面的是一个指针，指向propotype所在的函数，因为prototype都是指向了另一个对象的原型，最终是Person.prototype的原型,
+		//highStu instanceof Person //true
+		//highStu instanceof Student //true
+		//highStu instanceof HighStudent //true
+		
+	借用构造函数
+		function SuperType(name){
+			this.colors = ["red", "blue", "green"];
+			this.name = name;
+		}
+		function SubType(){
+			SuperType.call(this, name);//实际是在(未来将要)新创建的实例下调用了SuperType的构造方法，※这样就会在SubType对象上执行SuperType()函数中定义的所有对象初始化代码
+			//这种调用，实例间对引用类型的属性不会互相影响
+		}
+		subType = new SubType();
+		

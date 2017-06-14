@@ -5,6 +5,7 @@
 	function Person(name, age, score){
 		this.name = name;
 		this.age = age;
+		this.arr = [11, 22, 33, 44];
 		
 		this.sayName = function(){
 			console.log(this.name);
@@ -14,6 +15,15 @@
 	function Student(){
 		this.sayHello = function(){
 			console.log("Hello Hanhan1");
+		}
+		this.sayName = function(){
+			console.log(this.name + " is " + this.age + " years old");
+		}
+	}
+	
+	function HighStudent(){
+		this.saySchool = function(){
+			console.log("this is high school");
 		}
 	}
 	
@@ -65,7 +75,7 @@
 		var person4 = new Person()
 		console.log(person4.father);
 		console.log(person4.sex);
-		person4.sayHello();
+		//person4.sayHello();
 		
 		//var stu2 = new Student();
 		//student.sayHello();
@@ -73,5 +83,69 @@
 		
 		
 		console.log(String.prototype.toUpperCase.call("this is me"))
+		
+		person = new Person("Hanhan", 21, 30);
+		person.sayWei = function(){
+			console.log("Wei");
+		}
+		Student.prototype = person;
+		//Student.prototype = {
+		//	sayAgeAndName: function(){
+		//		console.log("age is "+this.age+";name is "+this.name);
+		//	}
+		//}
+		var stu = new Student();
+		stu.sayName.call(new Person("Hh", 21, 30));
+		Student.prototype.sayAge = function(){
+			console.log(this.age)
+		}
+		delete stu.sayName
+		stu.sayName.call(new Person("Hh", 21, 30));
+		
+		person.sayName();
+		
+		stu.sayWei();
+		stu.sayName();
+		//stu.sayAgeAndName();
+		
+		person = new Person("Hanhan", 21, 30);
+		Student.prototype = person;
+		HighStudent.prototype = new Student();
+		highStu = new HighStudent();
+		stu = new Student();
+		person = new Person();
+		console.log(highStu.constructor);
+		console.log(stu.constructor);
+		console.log(person.constructor);
+		
+		Student.prototype.child = [1, 2, 3, 4];
+		
+		person = new Student();
+		person2 = new Student();
+		
+		console.log(person.child)
+		console.log(person2.child)
+		person.child.push(1)
+		console.log(person.child)
+		console.log(person2.child)
+		
+		person = new Person("Hanhan", 21, 30);
+		person2 = new Person("Hanhan", 21, 30);
+		
+		console.log(person.arr)
+		console.log(person2.arr)
+		person.arr.push(44);
+		console.log(person.arr)
+		console.log(person2.arr)
+		
+		function MiddleStudent(){
+			Person.call(this, "Hanhan", 21, 30);
+			this.sayName = function(){
+				console.log(this.name+" is "+this.age+" years old.")
+			}
+		}
+		
+		var middleStu = new MiddleStudent();
+		middleStu.sayName();
 	})
 </script>

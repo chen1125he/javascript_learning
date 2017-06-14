@@ -130,7 +130,16 @@
 				console.log(this.name);
 			}
 		}
+		Person.prototype = {
+			sayAge: function(){
+				console.log(">>>>>>");
+				console.log(this.age);
+				console.log("<<<<<<");
+			}
+		}
+		
 		var cyy = new Person("cyy", 21, "PG");
+		cyy.sayAge();
 		console.log(cyy.name);
 		cyy.name = 'Zhh';
 		console.log(cyy.name);
