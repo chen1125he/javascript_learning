@@ -1,0 +1,89 @@
+<script type="text/javascript" src="../jquery-1.8.3.js"></script>
+
+<script type="text/javascript">
+	$(function(){
+	
+		var factorial = (function f(num){
+			if(num <= 1){
+				return 1;
+			}else{
+				return num * f(num-1);
+			}
+		
+		})
+		
+		console.log(factorial(3));
+		
+		factorial = function f2(num){
+			if (num <= 1){
+				return 1;
+			}else{
+				return num * f2(num-1);
+			}
+		}
+		f2 = null;
+		
+		console.log(factorial(4));
+		
+		
+		var sayHi = function sayH(){
+			console.log("sayHi");
+		}
+		
+		// start 闭包
+		function foo(x){
+			var temp = 3;
+			return function(y){
+				console.log(x + y + (++temp));
+			}
+		}
+		var fun = foo(3);
+		fun(4);
+		fun(4);
+		fun(4);
+		// end 闭包
+		// start 闭包与变量
+		function createFunctions(){
+			var result = new Array();
+			for (var i=0; i < 10; i++){
+				result[i] = function(){
+					return i;
+				}
+			}
+			i = 13;
+			return result;
+		}
+		res = createFunctions();
+		console.log(res[5]());
+		
+		function createFunctions2(){
+			var result = new Array();
+			for(var i = 0; i < 10; i++){
+				result[i] = function(num){
+					return function(){
+						return num;
+					}
+				}(i);
+			}
+			return result;
+		}
+		res2 = createFunctions2();
+		console.log(res2[9]());
+		
+		function test_fun(num){
+			console.log(num)
+			console.log(arguments.length)
+		}(112);
+		test_fun(113, 123)
+		console.log();
+		// end 闭包与变量
+		
+		var name = "cyy";
+		function sayName(){
+			console.log(name);
+			name = "zhh";
+			console.log(name)
+		}
+		sayName();
+	})
+</script>

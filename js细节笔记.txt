@@ -356,4 +356,124 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 			//这种调用，实例间对引用类型的属性不会互相影响
 		}
 		subType = new SubType();
+	
+	组合继承//调用两次超类
+		用构造方法继承属性，使每个实例拥有自己的属性
+		用原型来继承方法
 		
+	原型式继承//在没有必要兴师动众地创建构造函数，而只想让一个对象与另一个对象保持相似的情况下，原型式继承是完全可以胜任的
+		Object.create(obj) => function obj(o){
+											function F(){}
+											F.prototype = o;
+											return new F();
+							}
+			Object.create(obj, {
+				name: 'Greg'
+			})
+	寄生式继承//和寄生式构造函数和工厂模式类似
+	
+	
+	寄生组合式继承		
+		
+		
+30.函数 
+	(1)	sayHi();
+		function sayHi() {}
+	(2)	sayHi();	//这样调用会报错
+		var sayHi = function(){}
+	(3)	say();		//这样调用也会报错的
+		var sayHi = function say(){}	//这样赋值是ok的
+	
+	
+32.闭包
+	闭包是指有权访问另一个函数作用域中的变量的函数。(函数嵌套的时候，内层函数可以访问外层函数里面的变量)
+	闭包会包含外部函数的变量什么的，会占用更大的内存，因而慎用
+	闭包需要其他使用者不能知道闭包的细节
+	闭包的代码参考Array的sort()
+33.闭包与变量
+	闭包只能取得包含函数中任何变量的最后一个值
+	function createFunctions(){
+		var result = new Array();
+		for (var i=0; i < 10; i++){
+			result[i] = function(){
+				return i;
+			}
+		}
+		i = 13;
+		return result;
+	}
+	res = createFunctions();
+	console.log(res[5]());
+	//像是这里面的，每个函数里面的返回的都是13
+	
+	function createFunctions2(){
+			var result = new Array();
+			for(var i = 0; i < 10; i++){
+				result[i] = function(num){
+					return function(){
+						return num;
+					}
+				}(i);//还有这种操作？
+			}
+			return result;
+		}//这个写法可以达到上面的预期
+		
+		//上面的写法可以相当于声明一个函数，声明完了之后也会把这个函数返回，再通过()括号就可以调用了
+		
+34.this对象
+	var name = "The Window"
+	var object = {
+		name: 'My Object',
+		
+		getNameFunc: function(){
+			return function(){
+				return this.name;
+			}
+		}
+	}
+	
+	console.log(object.getNameFunc()())//The Window
+	
+	闭包内访问不到object对象，闭包内的只能访问外部函数的变量，如果把this保存到外部函数里面就可以访问得到啦
+	getNameFunc: function(){
+		that = this;
+		return function(){
+			return that.name;
+		}
+	}
+	
+	var object = {
+		name: 'My Object',
+		getName: function(){
+			return this.name;
+		}
+	}
+	object.getName(); 	//"My Object";
+	(object.getName = object.getName)();	//"The Window"
+	第二次这个赋值操作会返回一个函数，但已经没有对象了，所以没有this，对应的对象也就是window了
+	
+35.内存溢出
+	如果闭包的作用域链中保存着一个html元素，那么就意味着该元素无法被销毁
+	function assignHandler(){
+		var element = document.getElementById("someElement");
+		element.onclick = function(){
+			console.log(element.id)
+		}
+	}
+	//这样就可以解决，具体是什么意思以后再了解吧
+	function assignHandler(){
+		var element = document.getElementById("someElement");
+		var id = element.id
+		element.onclick = function(){
+			console.log(id);
+		}
+	}
+36.块级作用域，像c,java里面for(var i = 0; i < 10; i++){}里面的i就是在块级作用域里面，如果在for的外面，是调用不到这个i的
+	js模仿块级作用域
+		(function(){
+			//块级作用域
+		})();//这里的处理是相当于定义一个匿名函数，然后立即调用(包裹函数的括号是不允许去掉的，函数声明后面是不能跟小括号的，但被包起来的函数就是一个函数表达式了)
+			//这样就可以用一些临时变量了
+			
+37.私有变量，任何函数中定义的变量都可以是私有变量，因为不能在外部去访问它们
+	但可以

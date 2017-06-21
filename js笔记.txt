@@ -10,6 +10,14 @@
 		}
 	}
 	
+	var factorial = (function f(num){
+		if(num <= 1){
+			return 1;
+		}else{
+			return num * f(num-1)
+		}
+	}) //即使在后面把f赋值成其他的值也是无效的，递归仍能正常运行
+	
 2.因为上面的特点存在，js方法没有重载
 
 3.函数签名就是函数的声明信息，包括参数类型，参数个数，参数顺序之类。
@@ -43,7 +51,7 @@
 			}
 			return function(obj1, obj2){
 				console.log(obj1, obj2);//这两个是数组里面的两个参数, 为什么呢？
-				return 1;
+				return 1;				//闭包，这个会被返回，然后再被调用，传入两个参数
 			}
 		}
 6.数组迭代
@@ -110,3 +118,18 @@
 11.带_year可以表示只能通过方法访问的属性
 
 12.prototype就是一个给类的对象添加方法的方法，可以给类动态地添加方法，方便对象去调用
+
+13.执行环境，作用域链和活动对象
+	var name = "cyy";
+	function sayName(){
+		console.log(name);
+		name = "zhh";
+		console.log(name)
+	}// cyy, zhh
+	var name = "cyy";
+	function sayName(){		//活动对象的【提前声明】机制，先将函数的每个形参，实参都添加为该活动对象的属性和值，将该函数体内显示声明的变量和函数也添加为该活动对象的属性和值，
+		console.log(name);	//此时未赋值，但已经存在于活动对象之中
+		var name = "zhh";
+		console.log(name)
+	}// undefined, zhh
+	

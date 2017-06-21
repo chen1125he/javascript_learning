@@ -1,0 +1,22 @@
+<script type="text/javascript" src="../jquery-1.8.3.js"></script>
+
+<script type="text/javascript">
+
+	function object(o){
+		function F(){}
+		F.protorype = o;
+		return new F();
+	}
+	
+	
+	$(function(){
+		var person = {
+			name: "Nicolas",
+			friends: ["Shelby", "Court", "Van"]
+		};
+		
+		var anotherPerson = object(person);
+		anotherPerson.name = "Greg";
+		anotherPerson.friends.push("Rob");
+	})
+</script>
