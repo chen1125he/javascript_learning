@@ -1,0 +1,81 @@
+<script type="text/javascript" src="../jquery-1.8.3.js"></script>
+
+MoveTo:<br />
+x: <input type="text" id='moveToX'/><br />
+y: <input type="text" id='moveToY'/><br />
+<button id="moveToButton">MoveTo</button><br />
+
+MoveBy:<br />
+x: <input type="text" id='moveByX'/><br />
+y: <input type="text" id='moveByY'/><br />
+<button id="moveByButton">MoveBy</button><br />
+
+ResizeTo:<br />
+x: <input type="text" id='ResizeToX'/><br />
+y: <input type="text" id='ResizeToY'/><br />
+<button id="ResizeToButton">ResizeTo</button><br />
+
+<button id="openNewWindowButton">openNewWindow</button><br />
+<button id="closeNewWindowButton">closeNewWindow</button><br />
+<script type="text/javascript">
+	var newWin = 1;
+	function hasPlugin(name){
+			name = name.toLowerCase();
+			for(var i = 0; i < navigator.plugins.length; i++){
+				if(navigator.plugins[i].name.toLowerCase().indexOf(name) > -1){
+					return true;
+				}
+			}
+			return false;
+		}
+	$(function(){
+	
+		console.log(prompt("What's your name?", "Michael"));
+		
+		//window.print("===============");
+		
+		window.find("To");
+		window.find("To");
+		
+		console.log(document.location == window.location, document.location === window.location);
+		
+		
+		var posLeft = (typeof(window.screenLeft) == "number") ? window.screenLeft : window.screenX;
+		var posTop = (typeof(window.screenTop) == "number") ? window.screenTop : window.screenY;
+		
+		//console.log(posLeft, posTop)
+		//console.log("==========")
+		//console.log(window.moveTo(1, 1))
+		//console.log("==========")
+		
+		$("#openNewWindowButton").click(function(){
+			newWin = window.open("https://www.baidu.com", "_blank", "width=300, height=300");
+			console.log(newWin.opener = null)
+		})
+		$("#closeNewWindowButton").click(function(){
+			newWin.close();
+		})
+		$("#moveToButton").click(function(){
+			newWin.moveTo($("moveToX").val()/1, $("moveToY").val()/1)
+		})
+		
+		$("#moveByButton").click(function(){
+			newWin.moveTo($("moveByX").val()/1, $("moveByY").val()/1)
+		})
+		$("#ResizeToButton").click(function(){
+			console.log("<<<<<<<<<<<>>>>>>>>>>>>>>");
+			newWin.resizeTo($("resizeToX").val()/1, $("resizeToX").val()/1)
+		});
+		
+		console.log("<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>");
+		console.log(window.location.protocol);
+		console.log(window.location.search);
+		console.log(window.location.port);
+		console.log(window.location.pathname);
+		
+		console.log("==========zhh===========");
+		console.log(navigator.userAgent);
+		console.log(navigator.userAgent);
+		
+	})
+</script>

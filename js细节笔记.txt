@@ -479,3 +479,171 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	但可以通过闭包去访问
 	
 	访问私有变量和私有函数的公有方法称为特权方法
+	
+38.bom(window)
+	在全局作用域中声明的变量函数，都会变成window对象的属性和方法
+	但和window定义的对象还是有一点区别,全局变量不能通过delete删除
+		var age = 29;
+		window.color = "red";
+		
+		delete window.age; //在IE<9时抛出错误，其他都返回false
+		delete window.color;//在IE<9时抛出错误，其他都返回true
+		
+		window.age //29
+		window.color //undefined
+		
+	在访问未声明的变量时候会抛出错误，但通过window来调用就不会
+		var newValue = OldValue;//oldValue未声明会报错
+		var new Value = window.oldValue;//这里虽然也未声明但不会报错，这里做的只是查询window对象是否有oldValue对象
+		
+	html框架的window
+		frames[num]
+		frames[frameName]
+		window.frames[num/frameName]
+		top.frames[num/frameName]	//获取框架的window(推荐这个)
+		frame.parent//获取父框架，最外层的会获取top
+		
+	窗口位置
+		screenLeft/screenTop(IE/Safari/Opera/Chorm), screenX/screenY(Safari/Chorm/(Opera不建议))
+		var LeftPos = (typeof(window.screenLeft) == "number") ? window.screenLeft : window.screenX;
+		
+		window.moveTo(x, y)(移动到)(右正，下正)
+		window.moveBy(x, y)(向。。移动多少) 可能被禁用，ch尝试无效
+		
+	窗口大小
+		innerWidth/Height, outerWidth/Height, chorm中这两种返回相同的值
+		window.resizeTo(w, h)
+		window.resizeBy(要缩小的宽度, 要缩小的高度)也无效
+	location对象
+		window.location和document.location是一个对象(===)
+	导航和打开窗口
+		var win = window.open(href, target, "fullscreen=yes/no, height=num, left=num, location=no/yes(地址栏), menubar=yes/no, resizable=yes/no, scrollbars=yes/no, status=yes/no(状态栏), toolbar=yes/no, top=num, width=num"[, ])
+		
+		可以返回值win去调整窗口(resize/move(To/By))这个的尝试也无效
+		
+		win.close()是可以的
+		win.opener = null之后就不能再做窗口的交互了
+		
+		浏览器是可以屏蔽弹窗的，如果屏蔽那么window.open就会返回null，如果是阻止那么就会报错，所以可以用try-catch
+		
+		var blocked = false;
+		try {
+			var win = window.open("https://www.baidu.com", "_blank");
+			if(win == null){
+				blocked = true;
+			}
+		} catch {
+			blocked = true
+		}
+		if (blocked){
+			// 弹窗未成功
+		}
+	间歇调用和超时调用
+		setTimeout(javascriptString, time);//不推荐用字符串
+		var timeout = setTimeout(function(){
+			//	传递一个函数, 推荐
+		}, 1000)
+		// 它的作用是在1s之后把代码放到执行队列里面去，而不一定就是在1s之后就执行，因为是单线程
+		可以用clearTimeout(timeout)把它取消
+		
+		setInterval()和超时调用相同
+		
+	弹窗
+		alert()
+		confirm() => t/f
+		prompt("str", "default") => "input"/null
+		window.print()//弹出打印按钮
+		window.find(str)//高亮显示str
+		
+	window.location
+		search	//获取链接的参数，从?开始到结束
+		protocol	//返回页面使用的协议，通常是http/https
+		port	//端口号
+		pathname	//获取文件路径:/path/filename.extend
+		href	//获取链接，也可以用toString()
+		hostname	//返回不带端口号的服务器名称
+		host	//服务器名称和端口号
+		hash	//
+		
+	window.location = url/location.href=url/location.assign(url) 这三个操作相同，会在历史记录中生成一条记录
+		上面的其他属性也可以通过赋值去修改
+		
+		通过setTimeout(function(){location.replace(url)}, 1000)可以跳转，不会留历史记录也不能后退
+		
+		location.reload()//重新加载，有可能从缓存中加载
+		location.reload(true)//从服务器中重新加载
+		
+	navigator/获取浏览器信息
+		userAgent/用户代理
+		appCodeName/通常都是Mozilla
+		appName/完整的浏览器信息，chorm为什么会输出netscape
+		oscpu/操作系统或者cpu //chorm似乎无效
+		...
+	检测插件
+		name//插件的名字
+		description//插件的描述
+		filename//插件的文件名
+		length//插件所处理的MIME类型数量
+		
+		//检测插件(在IE中无效)
+		function hasPlugin(name){
+			name = name.toLowerCase();
+			for(var i = 0; i < navigator.plugins.length; i++){
+				if(navigator.plugins[i].name.toLowerCase().indexOf(name) > -1){
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		//IE用,name是插件的标示符
+		function hasIEPlugin(name){
+			try{
+				new ActiveXObject(name);
+			}catch(ex){
+				return false;
+			}
+		}
+		alert(hasIEPlugin("ShockwaveFlash.ShockwaveFlash"));
+		
+	screen对象
+		width//屏幕宽度
+		height//屏幕高度
+		
+	history
+		go(-1/1/2/url(到历史中最近的一个url))
+		forward/back//向前向后跳1
+		length//是0的话可以判断是不是打开的第一个页面，但google的却是1诶
+		
+39.客户端检测
+
+	
+	
+	检测方法是否可用，有的浏览器不支持某些方法，然后就用其他的方法来代替
+	document.getElementById();在ie5.0之前不支持
+	function getElement(id){
+		if(document.getElementById){
+			return document.getElementById(id);
+		}else if(document.all){
+			return document.all[id]
+		}else{
+			throw new Error("没有id方法")
+		}
+	}
+	
+	1).能力检测
+		想知道某个特性是否会按照适当方式行事(不仅仅是某个特性是否存在)
+		function isSortable(object){
+			return typeof object.sort == "function"
+		}//尽可能地去用typeof去做能力检测
+	2).能力检测不是浏览器检测，检测到几个或者某几个特性并不能确定浏览器
+	
+	3).怪癖检测，识别浏览器的特殊行为
+		像Safari 3以前版本会枚举被隐藏的属性，这种会被归为bug
+	4).用户代理检测
+		对浏览器版本的判断(isIE6 || isIE7) 不如 (isVer >= 6)因为版本可能会更新
+		
+※8.9章需要重新学习
+※8.9章需要重新学习
+※8.9章需要重新学习
+
