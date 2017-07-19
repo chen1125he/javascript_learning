@@ -647,3 +647,37 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 ※8.9章需要重新学习
 ※8.9章需要重新学习
 
+40.dom
+	获取子节点
+		childNodes[num]/childNodes.item(num)/firstChild/lastChild 获取到的节点很奇怪
+		length
+		
+		Array.prototype.slice() 可以将arguments转化为数组
+		function convrtToArray(nodes){
+			var array = null;
+			try{
+				array = Array.prototype.slice.call(nodes, 0);	//非ie
+			}catch(ex){											//ie8及以下
+				array = new Array();
+				for(var i = 0, len = nodes.length; i < len; i++){
+					array.push(nodes[i]);
+				}
+			}
+			return array;
+		}
+	获取兄弟节点
+		nextSibling/previousSibling
+	父节点
+		parentNode
+		
+	节点操作
+		node.appendChild(),关系指针会被更新
+		node.replaceChild(newNode, node.lastNode)
+		
+41.Document类型
+	nodeType的值为9/nodeName值为"#document"/parentNode的值为null/
+	document.title可以设置和获取title
+	document.domain可以获取域名, document.URL可以获取完整的链接, document.referrer可以获取上一页面的url(链接到这个页面的url)
+		domain是可以重设置的
+		
+	document.getElementById("myDiv")	//在ie7以及更早的版本中不区分大小写
