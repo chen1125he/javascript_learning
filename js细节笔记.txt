@@ -1,10 +1,10 @@
 2.	Javascript区分大小写
 3.	Js中未用var定义的变量会成为全局变量即使在一个方法中用到的未用var定义变量在后面的方法里面都能使用
-4.	Typeof()的值有undefined/Boolean/string/number/object(是个对象或者null)/function
+4.	Typeof()的值有undefined/boolean/string/number/object(是个对象或者null)/function
 声明了未赋值就是undefined(一定要先声明，未声明就是报错)
 5.	任何类型都有和boolean相匹配的值，数字false是0和NaN，string的false是空串object的false是null
 6.	Number类型可以有8进制和16进制(0/0x)
-7.	NaN是一个特殊的数值任何涉及NaN的操作都会返回NaN  另NaN不等于NaN
+7.	NaN是一个特殊的数值(number)任何涉及NaN的操作都会返回NaN  另NaN不等于NaN
 8.	数字转换成字符串的可以和三个Number,parseInt(), parseFloat
 Number() Boolean => 0/1, null => 0, undefined => NaN 没有八进制，十六进制会直接转换成同值的十进制
 parseInt 有八进制从前向后读取，还可以带两个参数parseInt(‘AF’, 16)指定进制，这时候前面可以不带进制标志
@@ -61,11 +61,28 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	person.name // 依然是"Nicolas"
 	
 19.作用域链
+
+	局部变量是根据方法块划分的, for while if 并不是
+	
+	   var a =1;  
+	   function test(){  
+		  alert(a);  
+		  var a = 2;  
+		  alert(a);  
+	   }  
+	   test();  
+	   alert(a);
+	   // 结果是undefined 2 1
+	   // test中第一个a为undefined，javascript在执行前会对整个脚本文件的定义部分做完整分析，所以在函数执行前，函数休中的变量a就被指向内部的局部变量而不是外部的全局变量，但这时a只有声明，还没有赋值
+	   // 这里可以理解为 在运行之前变量就都声明好了，不管位置在哪，如果想要使用全局变量a，则要用window.a
+
 	局部变量想作用到其他域，可以用1.with, 2.try-catch
+	try-catch(error) error.name可以获取error类型，error.message可以获取信息
+	
 	
 	js的作用域和c不太相同在for循环和if里面定义的变量还是可以作用到其他地方的, while,do-while也是可以的, switch-case里面也是可以的
 	function func(num1, num2){
-		sum = num1 + num2; // 如果这个sum没有加var去初始化，那么是可以在外部被访问到的，加了则不行，不过如果在stric模式下会报错
+		sum = num1 + num2; // 如果这个sum没有加var去初始化，那么是可以在外部(没有加var算是全局)被访问到的，加了则不行，不过如果在stric模式下会报错
 		return sum
 	}
 	
@@ -92,7 +109,7 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	function fun(){}
 	这两个是不一样的
 	第二种对顺序没有要求，不论写在哪都可以，因为一开始会有一个名为函数声明提升的过程，将函数声明添加到执行环境中
-	第一个只相当一个变量，运行到这的时候函数才会存在
+	第一个只相当一个变量，运行到这的时候函数才会存在，但变量fun会在一开始就存在，运行到这个函数之前是undefined
 	这两种的写法区别只在这，什么时候可以调用函数
 	也可以这样写，var sum = function sum(){}	//safari会不支持
 	但这种也不能在之前就调用这个函数
@@ -108,7 +125,7 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	falseObject instanceof Boolean => true
 	typeof(falseObject) => object 	//是对象
 	typeof(false) => boolean	//是boolean类型
-25.同Boolean类型一样，Number类型也重写了valueOf(), toLocalString()和toString()
+25.同Boolean类型一样，Number类型也重写了valueOf(), toLocaleString()和toString()[需要用变量才能调用这个方法，直接数字是不行的]
 	number.toString()可以传递
 	number.toFixed(),可以转换成保留传入参数的小数位数的字符串，会四舍五入
 	
@@ -202,7 +219,7 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 		_hobby:{
 			value: "game"
 		},
-		hobby:{
+		hobby:{		//这种可以直接通过person.hobby = value  (set); person.hobby  (get)
 			get: function(){
 				return this._hobby;
 			},
@@ -211,6 +228,8 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 			}
 		}
 	})
+	
+	https://www.cnblogs.com/ayqy/p/4471638.html 参考
 	
 	构造函数(1)
 		function Person(name, age, job){
@@ -229,6 +248,16 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 		也可以通过call/apply来调用
 		var o = new Object();
 		Person.call(o, "cyy", 21, "PG");
+		
+		#######call方法########
+		#https://www.zhihu.com/question/20289071
+		#call和apply是为了动态改变this而出现的#
+		#这样就可以使用不属于该对象的其他方法#
+		#还有可以产生继承#
+		#  Array.prototype.slice.call(document.getElementsByTagName('li')) instanceof Array => true 这样就可以使用array中的方法了#
+		#  document.getElementsByTagName('li') instanceof Array => false#
+		aMethodWithThis.call(objectA[, argument])
+		#######call方法########
 		
 		prototype添加的方法，即使是在new完一个对象后添加的，这个对象也可以使用的(5)
 		也可以通过prototype去修改原来的方法，也可以通过delete Object.prototype.delete去删除这个方法, 删除之后再调用会报错
@@ -325,7 +354,9 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 	原生对象(String, Array, Object)
 	
 29.继承
+	https://www.cnblogs.com/ayqy/p/4471638.html 参考
 	原型链//所有原型都会继承自Object.prototype,找方法会先去找实例，再找原型，再找链的上一个实例，再找原型
+		缺陷：共享父类型的引用类型， 创建子类实例时，无法向父类构造函数传参
 		Student.prototype = new Person("Hanhan", 21, 30);//实质是替换原型
 		var stu = new Student();	//继承了//如果有和super相同的方法，那是方法的重写，目前还不知道怎么去调用super方法//如果重写的方法被删除，那就会调用到原方法
 		
@@ -675,9 +706,31 @@ Undefined和null是没有toString()方法的，可以用String(undefined)和String(null)去转
 		node.replaceChild(newNode, node.lastNode)
 		
 41.Document类型
+	元素element nodeType => 1
+	属性attr nodeType => 2
+	文本text nodeType => 3
+	注释comments nodeType => 8
+	文档document nodeType => 9
+	# comment竟然也算是节点=_=
+
 	nodeType的值为9/nodeName值为"#document"/parentNode的值为null/
 	document.title可以设置和获取title
 	document.domain可以获取域名, document.URL可以获取完整的链接, document.referrer可以获取上一页面的url(链接到这个页面的url)
 		domain是可以重设置的
 		
 	document.getElementById("myDiv")	//在ie7以及更早的版本中不区分大小写
+	document.getElementsByTagName('tagName') // => HTMLCollection, 可以通过collection.namedItem('myItem');(会取得第一个)
+		可以传入 * 表示全部
+		item.tagName.toLowerCase() == 'div'	//也className,lang,title,id 这些属性可以用item.title="" 自定义就不行了
+		item.get/setAttribute('id')//自定义attr也是可以的
+		item.removeAttribute()
+42.创建元素
+	var div = document.createElement("div");
+	div.id = "myDiv";
+	div.className="box";
+	
+	var div = document.createElement("<div id=\"myDiv\" class=\"\"></div>")
+42.Text类型<div>this is text</div>节点里面的this is text就是text
+	属性nodeType(3)/nodeName(#text)/nodeValue(this is text)/parentNode(div)/
+	方法appendData(text)/deleteData(offset, count)/insertData(offset, text)/replaceData(offset, count, text)/slipText(offset)/substringData(offset, count)//offset从1开始
+43.document.

@@ -1,0 +1,65 @@
+<script type="text/javascript">
+	function try_catch(){
+		if(true){
+			var b = 10;
+			h = 20
+		}
+		try{
+			var a = 10;
+			console.log(10)
+			console.log(x, b);
+		}catch(error){
+			console.log(a, 10);
+			console.log(typeof(error));
+			console.log(error.name);
+			console.log(error.message)
+			console.log(window.h)
+		}finally{
+			
+		}
+	}
+	function func(){
+		in_function(10, function(m){
+			console.log(m+10);
+		})
+	}
+	function in_function(a, func){
+		console.log(a)
+		console.log(typeof(func))
+		func(a+10)
+	}
+	
+	var person = {
+		name: 'zhh',
+		age: '21',
+		job: 'PM',
+		getJob: function(){
+			return this.job;
+		},
+		getName: function(){
+			return this.name;
+		}
+	}
+	
+	function Person(name){
+		this.name = name;
+	}
+	var personA = new Person('aa');
+	var personB = new Person('bb');
+	
+	
+	person.getName.call(personA);
+	
+	function with_this(){
+		return this.name
+	}
+	
+	function HighStu(school){
+		this.school = school
+	}
+	
+	
+	
+	
+	
+</script>

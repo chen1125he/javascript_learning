@@ -1,0 +1,15 @@
+<script type="text/javascript" src="jquery-1.8.3.js"></script>
+<script type="text/javascript">
+	var a = setInterval("start()", 50)
+	function start(){
+		$.ajax({
+			type: 'get',
+			dataType: 'jsonp',
+			url: 'http://tifu-apps-ws.xoyo.com/jx3/tifu/question',
+			success: function($data){
+				console.log($data);
+				console.log($data.data.request_id);
+			}
+		})
+	}
+</script>

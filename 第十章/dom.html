@@ -2,9 +2,11 @@
 
 <body id="bo">
 <div id="di">
-	<p>this is p</p>
-	<i>this is p</i>
-	<b>this is p</b>
+	<p class="ppp">this is p</p>
+	<i class="ppp">this is p</i>
+	<b class="ppp">this is p</b>
+	<p class="ppp" data-self='this'>Œ“</p>
+	<div> this is  <!-- comments --></div>
 </div>
 </body>
 
@@ -14,5 +16,12 @@
 		console.log(Node.ATTRIBUTE_NODE);
 		console.log(Array.prototype.slice.call($("#di")[0].childNodes, 0)[0]);
 		console.log($("#di")[0].childNodes[0])
+		ps = document.getElementsByTagName('p');
+		console.log(ps.length)
+		console.log(ps[0].innerText)
+		
+		var textNode = document.createTextNode("Hello world!!");
+		var node = document.getElementsByTagName("div")[1];
+		node.appendChild(textNode);
 	})
 </script>
