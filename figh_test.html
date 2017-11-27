@@ -1,14 +1,29 @@
 <script type="text/javascript" src="jquery-1.8.3.js"></script>
 <script type="text/javascript">
-	var a = setInterval("start()", 50)
+	var a = setInterval("start()", 500);
+	var game_url = "http://tifu-apps-ws.xoyo.com/jx3/tifu/";
 	function start(){
 		$.ajax({
 			type: 'get',
 			dataType: 'jsonp',
-			url: 'http://tifu-apps-ws.xoyo.com/jx3/tifu/question',
+			url: game_url+"question",
 			success: function($data){
-				console.log($data);
-				console.log($data.data.request_id);
+				if(typeof(ques = $data.data.question) == "string"){
+					console.log("question is "+$data.data.question);
+					answ = ques.match(/(:|：)(.*?)(\)|）)/);
+					console.log("answer is "+answ[2]);
+					$.ajax({
+						type: 'get',
+						data: {'answer' : answ[2]},
+						dataType: 'jsonp',
+						url: game_url + "grabcode",
+						success: function($data2){
+							console.log($data2, "ajax2");
+						}
+					})
+				}else{
+					console.log($data, "ajax1");
+				}
 			}
 		})
 	}
